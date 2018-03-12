@@ -1,13 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.midday</groupId>
     <artifactId>JFoolNLTK</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
+    <distributionManagement>
+        <snapshotRepository>
+            <!-- 这个id需要在setting.xml中设置，后边讲到  -->
+            <id>oss</id>
+            <name>OSS Snapshots Repository</name>
+            <!-- 这里的url就是Issue中回复的snapshots 的repo地址-->
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>oss</id>
+            <name>OSS Staging Repository</name>
+            <!-- 这里的url就是Issue中回复的staging 的repo地址-->
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
 
+    <url>https://github.com/rockyzhengwu/JFoolNLTK</url>
+    <description>FoolNLTK java version</description>
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A Chinese Nature Language toolkit</comments>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/rockyzhengwu JFoolNLTK</url>
+        <connection>scm:git:git@github.com:rockyzhengwu/JFoolNLTK.git</connection>
+        <developerConnection>scm:git:git@github.com:rockyzhengwu/JFoolNLTK.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
     <properties>
         <java.version>1.8</java.version>
     </properties>
