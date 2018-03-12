@@ -4,7 +4,7 @@
 
 ## 使用方法
 ```java
-import me.midday.BSNLTK;
+import me.midday.FoolNLTK;
 import me.midday.lexical.AnalysisResult;
 import me.midday.lexical.Entity;
 import me.midday.lexical.LexicalAnalyzer;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class LSTMLexicalParserDemo {
     public static void main(String[] args){
-        LexicalAnalyzer lexicalAnalyzer = BSNLTK.getLSTMLexicalAnalyzer();
+        LexicalAnalyzer lexicalAnalyzer = FoolNLTK.getLSTMLexicalAnalyzer();
         String text = "北京欢迎你";
         // 分词
         List<List<Word>> words =  lexicalAnalyzer.cut(text);

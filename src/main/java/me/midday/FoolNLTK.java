@@ -13,11 +13,11 @@ import java.io.InputStream;
 import java.util.zip.ZipException;
 
 
-public class BSNLTK {
+public class FoolNLTK {
     private static LexicalAnalyzer defaultLexicalAnalyzer;
 
     private static TFPredictor createPredictor(String name, int classNum) throws IOException {
-        InputStream inputStream = BSNLTK.class.getResourceAsStream(name);
+        InputStream inputStream = FoolNLTK.class.getResourceAsStream(name);
         byte[] segb = IOUtils.toByteArray(inputStream);
         TFPredictor model = new TFPredictor(segb, classNum);
         return model;
@@ -27,7 +27,7 @@ public class BSNLTK {
         File zipFile = null;
         LexicalAnalyzer lexicalAnalyzer = null;
         try {
-            InputStream mapIn = BSNLTK.class.getResourceAsStream("/nmodels/all_map.json");
+            InputStream mapIn = FoolNLTK.class.getResourceAsStream("/nmodels/all_map.json");
             Vocab vocab = new Vocab(mapIn);
             TFPredictor segModel = createPredictor("/nmodels/seg.pb", vocab.getSegLabelNum());
             TFPredictor posModel = createPredictor("/nmodels/pos.pb", vocab.getPosLabelNum());
