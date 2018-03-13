@@ -4,27 +4,45 @@
 
     <groupId>me.midday</groupId>
     <artifactId>JFoolNLTK</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
+    
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <name>JFoolNLTK</name>
+    <organization>
+        <name>me.midday</name>
+        <url>http://midday.me</url>
+    </organization>
+
+    <url>https://github.com/rockyzhengwu/JFoolNLTK</url>
+    <description>FoolNLTK java version</description>
+
+    <developers>
+        <developer>
+            <name>wu.zheng</name>
+            <email>zhengwu@midday.me</email>
+            <url>http://www.midday.me</url>
+        </developer>
+    </developers>
 
     <distributionManagement>
         <snapshotRepository>
-            <!-- 这个id需要在setting.xml中设置，后边讲到  -->
             <id>oss</id>
             <name>OSS Snapshots Repository</name>
-            <!-- 这里的url就是Issue中回复的snapshots 的repo地址-->
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>oss</id>
             <name>OSS Staging Repository</name>
-            <!-- 这里的url就是Issue中回复的staging 的repo地址-->
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
     </distributionManagement>
 
-    <url>https://github.com/rockyzhengwu/JFoolNLTK</url>
-    <description>FoolNLTK java version</description>
 
     <licenses>
         <license>
@@ -76,6 +94,21 @@
                 <targetPath>nmodels</targetPath>
             </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
 
