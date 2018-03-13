@@ -1,6 +1,16 @@
 # FoolNLTK-java
 [FoolNLTK](https://github.com/rockyzhengwu/FoolNLTK) java 版本
 
+## maven
+
+```
+  <dependency>
+       <groupId>me.midday</groupId>
+       <artifactId>JFoolNLTK</artifactId>
+       <version>1.0</version>
+  </dependency>
+```
+
 
 ## 使用方法
 ```java
