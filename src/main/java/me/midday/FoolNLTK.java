@@ -7,14 +7,14 @@ import me.midday.lexical.TFPredictor;
 import me.midday.lexical.Vocab;
 import org.apache.commons.io.IOUtils;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipException;
 
 
 public class FoolNLTK {
-    private static LexicalAnalyzer defaultLexicalAnalyzer;
+    private static LexicalAnalyzer defaultLexicalAnalyzer = null;
 
     private static TFPredictor createPredictor(String name, int classNum) throws IOException {
         InputStream inputStream = FoolNLTK.class.getResourceAsStream(name);
@@ -24,21 +24,24 @@ public class FoolNLTK {
     }
 
     public static LexicalAnalyzer getLSTMLexicalAnalyzer() {
-        File zipFile = null;
-        LexicalAnalyzer lexicalAnalyzer = null;
+        if (defaultLexicalAnalyzer !=null ){
+            return defaultLexicalAnalyzer;
+        }
+
+//        LexicalAnalyzer lexicalAnalyzer = null;
         try {
             InputStream mapIn = FoolNLTK.class.getResourceAsStream("/nmodels/all_map.json");
             Vocab vocab = new Vocab(mapIn);
             TFPredictor segModel = createPredictor("/nmodels/seg.pb", vocab.getSegLabelNum());
             TFPredictor posModel = createPredictor("/nmodels/pos.pb", vocab.getPosLabelNum());
             TFPredictor nerModel = createPredictor("/nmodels/ner.pb", vocab.getNerLabelNum());
-            lexicalAnalyzer = new LSTMLexicalAnalyzer(vocab, segModel, posModel, nerModel);
+            defaultLexicalAnalyzer = new LSTMLexicalAnalyzer(vocab, segModel, posModel, nerModel);
         }catch (ZipException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return lexicalAnalyzer;
+        return defaultLexicalAnalyzer;
     }
 
 }
