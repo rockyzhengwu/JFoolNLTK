@@ -90,11 +90,19 @@ public class TFPredictor {
 
         Tensor inputx = TFUtil.createTensor(sents, maxSentLength);
         Tensor lengths = Tensor.create(sentLengths);
-        Tensor logits = session.runner().feed("char_inputs", inputx).feed("dropout", dropT).feed("lengths", lengths).fetch("project/logits").run().get(0);
+        Tensor logits = session.runner()
+                .feed("char_inputs", inputx)
+                .feed("dropout", dropT)
+                .feed("lengths", lengths)
+                .fetch("project/logits").run().get(0);
 
         if (tranValue == null){
             tranValue = new float[numClass + 1][numClass + 1];
-            Tensor trans = session.runner().feed("char_inputs", inputx).feed("dropout", dropT).feed("lengths", lengths).fetch("crf_loss/transitions").run().get(0);
+            Tensor trans = session.runner()
+                    .feed("char_inputs", inputx)
+                    .feed("dropout", dropT)
+                    .feed("lengths", lengths)
+                    .fetch("crf_loss/transitions").run().get(0);
             trans.copyTo(tranValue);
         }
 

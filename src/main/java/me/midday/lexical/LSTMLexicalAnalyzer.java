@@ -2,12 +2,17 @@ package me.midday.lexical;
 
 
 
+import javafx.util.Pair;
+import me.midday.dictionary.Match;
+import me.midday.dictionary.Trie;
 import me.midday.ruleparser.RuleEntityParserFactory;
 
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LSTMLexicalAnalyzer implements LexicalAnalyzer {
 
@@ -15,6 +20,29 @@ public class LSTMLexicalAnalyzer implements LexicalAnalyzer {
     private TFPredictor posModel = new TFPredictor();
     private TFPredictor nerPredictor = new TFPredictor();
     private Vocab vocab;
+    private Trie dictTrie = new Trie();
+    private Map<String, Double> wordWeight = new HashMap<>();
+    private double modelWeight = 5.0;
+
+
+    private Double queryWeight(String word){
+        return wordWeight.get(word);
+    }
+
+
+    public void addUserDict(String userDictPath) throws IOException {
+        BufferedReader br = new BufferedReader(
+                new InputStreamReader(new FileInputStream(userDictPath), "utf-8"));
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] words = line.split("\t");
+            dictTrie.addWord(words[0]);
+            wordWeight.put(words[0], Double.parseDouble(words[1]));
+        }
+        br.close();
+        dictTrie.createFail();
+
+    }
 
     public LSTMLexicalAnalyzer(Vocab vocab, TFPredictor segModel, TFPredictor posModel, TFPredictor nerPredictor){
         this.vocab = vocab;
@@ -27,7 +55,11 @@ public class LSTMLexicalAnalyzer implements LexicalAnalyzer {
         loadModel(segModelPath, posModelPath, nerModelPath, vocabPath);
     }
 
-    public LSTMLexicalAnalyzer(InputStream zipInputStream, InputStream segModelStream, InputStream posModelStream, InputStream nerModelStream) {
+    public LSTMLexicalAnalyzer(
+            InputStream zipInputStream,
+            InputStream segModelStream,
+            InputStream posModelStream,
+            InputStream nerModelStream) {
 
     }
 
@@ -119,17 +151,45 @@ public class LSTMLexicalAnalyzer implements LexicalAnalyzer {
         int sentSize = docs.size();
         for (int i = 0; i < sentSize; i++) {
             List<Word> wds = cutMap(paths.get(i), strToList(docs.get(i)));
-            res.add(wds);
+            List<Word> mergeResult = mergeDict(docs.get(i), wds);
+            res.add(mergeResult);
         }
         return res;
+    }
+
+    private List<Word> mergeDict(String text, List<Word> modelResult){
+        List<Match> mathList = dictTrie.parseText(text);
+
+        Graph graph = new Graph(text.length()+1);
+
+        for (Match match: mathList){
+            graph.addEdge(match.getStart(), match.getEnd(), queryWeight(match.getContent()));
+        }
+        int index = 0;
+        for (Word mword: modelResult){
+            int end = index + mword.getContent().length();
+            graph.addEdge(index, end, modelWeight);
+            index = end;
+        }
+
+        List<Pair<Integer, Integer>> indexPairs = graph.extract();
+
+        List<Word> cutResult = new ArrayList<>();
+        for (Pair<Integer, Integer> p: indexPairs){
+            cutResult.add(new Word(text.substring(p.getKey(), p.getValue())));
+        }
+        return cutResult;
     }
 
     @Override
     public List<List<Word>> cut(String text) {
 //        List<String> sents = StringUtil.docToSents(text);
         List<String> sents = new ArrayList<>();
+
         sents.add(text);
-        return cut(sents);
+        List<List<Word>> modelResult = cut(sents);
+        List<List<Word>> cutresults = new ArrayList<>();
+        return modelResult;
     }
 
     @Override
@@ -266,6 +326,7 @@ public class LSTMLexicalAnalyzer implements LexicalAnalyzer {
                 i += 1;
                 d = docs.get(i);
             }
+
             List<Entity> ruleEntity = RuleEntityParserFactory.parserAll(d);
             List<Entity> entities = combineNer(strToList(d), nerLabel);
             entities.addAll(ruleEntity);

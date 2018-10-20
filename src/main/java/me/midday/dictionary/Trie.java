@@ -72,14 +72,13 @@ public class Trie {
             nextNode = currentNode.getNext(w);
             while (nextNode == null && currentNode.getDepth() != 0) {
                 currentNode = currentNode.getFail();
-                System.out.println(currentNode);
                 nextNode = currentNode.getNext(w);
             }
             if (nextNode != null) {
                 String emit = nextNode.getEmits();
                 if (emit != null) {
                     int start = i - emit.length();
-                    Match match = new Match(start, i-1, emit);
+                    Match match = new Match(start+1, i+1, emit);
                     matches.add(match);
                 }
                 currentNode = nextNode;

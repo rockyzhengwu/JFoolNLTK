@@ -1,5 +1,6 @@
 package me.midday.lexical;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface LexicalAnalyzer {
@@ -12,5 +13,6 @@ public interface LexicalAnalyzer {
 
     List<AnalysisResult> analysis(String text);
     List<AnalysisResult> analysis(List<String> text);
+    void addUserDict(String userDictPath) throws IOException;
 
 }

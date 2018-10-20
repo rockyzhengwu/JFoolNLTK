@@ -11,12 +11,14 @@ public class DictionaryDemo {
         Trie trie = new Trie();
         trie.addWord("北京");
         trie.addWord("北京天安门");
-        String text = "我在北京天安门等你";
+
+        String text = "北京欢迎你北京天安门";
         trie.createFail();
         List<Match> mathList = trie.parseText(text);
         for(Match m: mathList){
             System.out.println(m);
         }
+
         "sentence".contains("word");
     }
 

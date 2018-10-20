@@ -44,5 +44,4 @@ public class RuleEntityParser {
         return entities;
     }
 
-
 }
