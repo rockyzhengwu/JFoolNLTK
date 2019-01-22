@@ -289,7 +289,7 @@ public class LSTMLexicalAnalyzer implements LexicalAnalyzer {
         }
 
         if (ner.length() != 0) {
-            Entity entity = new Entity(charList.size() - ner.length() + 1, charList.size(), ner.toString(), tLabel);
+            Entity entity = new Entity(charList.size() - ner.length(), charList.size() - 1, ner.toString(), tLabel);
             entities.add(entity);
         }
         return entities;
